@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crud-microservice
+  labels:
+    app: crud-microservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crud-microservice
+  template:
+    metadata:
+      labels:
+        app: crud-microservice
+    spec:
+      containers:
+      - name: crud-microservice
+        image: as222472055/crud:5

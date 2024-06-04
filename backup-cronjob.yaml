@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mongo
+spec:
+  schedule: "0 0 * * *"  # Run the job every day at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: mongo:latest
+            command: ["/bin/sh", "-c"]
+            args: ["mongodump --host mongo --username admin --password password --out /backup/$(date +'%Y-%m-%d') --authenticationDatabase admin"]
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: backup-pvc 
